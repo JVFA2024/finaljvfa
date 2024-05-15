@@ -63,3 +63,9 @@ body {
 .rcb-view-history-container {
   display: none !important;
 }
+
+.rs-modal-header .rs-modal-header-close {
+  background-color: #fff !important;
+  padding: 5px !important;
+  border-radius: 50% !important;
+}

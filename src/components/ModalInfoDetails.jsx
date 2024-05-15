@@ -1,22 +1,12 @@
 import { BookOpenText } from "lucide-react";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Modal, Button } from "rsuite";
-import ModalInfoDetails from "./ModalInfoDetails";
-const ModalInfo = ({ open, handleClose }) => {
+const ModalInfoDetails = ({ open, handleClose }) => {
   const { t, i18n } = useTranslation();
-  const [openModel, setOpenModel] = useState(false);
-  const handleOpenModel = () => {
-    setOpenModel(true);
-  };
-  const handleCloseModel = () => setOpenModel(false);
   return (
     <Modal open={open} onClose={handleClose} dir={i18n.dir()}>
       <Modal.Body className="text-center text-xl flex justify-around">
         {t("modal.title")}
-        <button onClick={handleOpenModel}>
-          <BookOpenText />
-        </button>
       </Modal.Body>
 
       <Modal.Body className="text-center">{t("modal.title2")}</Modal.Body>
@@ -30,13 +20,8 @@ const ModalInfo = ({ open, handleClose }) => {
           {t("modal.ok")}
         </Button>
       </Modal.Footer>
-      <ModalInfoDetails
-        open={openModel}
-        setOpen={setOpenModel}
-        handleClose={handleCloseModel}
-      />
     </Modal>
   );
 };
 
-export default ModalInfo;
+export default ModalInfoDetails;

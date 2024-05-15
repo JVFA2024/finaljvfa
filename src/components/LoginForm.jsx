@@ -38,13 +38,13 @@ const LoginForm = () => {
     event.preventDefault();
     try {
       const res = await http.post("/login", { username, password });
-      console.log(res);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       localStorage.setItem("token", res.data.token);
       toaster.push(successMessage, { placement });
       setUsername("");
       setPassword("");
       navigate("/");
+      window.location.reload();
     } catch (error) {
       toaster.push(errMessage, { placement });
     }

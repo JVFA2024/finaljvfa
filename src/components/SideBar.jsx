@@ -44,6 +44,9 @@ const SideBar = ({ handleOpen, setMessages }) => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
     localStorage.removeItem("chatMessages");
+    localStorage.removeItem("rcb-history");
+    localStorage.removeItem("categories");
+    localStorage.removeItem("amounts");
     navigate("/login");
   };
   const renderToggle = (props) => (

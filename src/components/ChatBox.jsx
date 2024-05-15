@@ -337,6 +337,73 @@ const ChatBox = ({ messages, setMessages }) => {
     }
   };
 
+  const callAiApi = async (prompt) => {
+    try {
+      const res = await http.post("/api/general_query", { prompt });
+
+      const data = res.data.data.result;
+      if (data.includes("Alternative questions:")) {
+        const resultParts = data.split("\n");
+
+        const alternativeQuestions = resultParts
+          .filter((part) => /^\d+\./.test(part))
+          .map((question) => question.split(".").slice(1).join(".").trim());
+        setMessages([
+          ...messages,
+          {
+            sender: "user",
+            text: prompt,
+            time: new Date().toLocaleString([], {
+              weekday: "short",
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          },
+          {
+            sender: "bot",
+            text: data,
+            choices: alternativeQuestions.map((question) => ({
+              text: question,
+              value: "api-question",
+            })),
+            time: new Date().toLocaleString([], {
+              weekday: "short",
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          },
+        ]);
+      } else {
+        setMessages((messages) => [
+          ...messages,
+          {
+            text: data,
+            sender: "bot",
+            time: new Date().toLocaleString([], {
+              weekday: "short",
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          },
+        ]);
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+      setMessages((messages) => [
+        ...messages,
+        {
+          text: error.message,
+          sender: "bot",
+          time: new Date().toLocaleString([], {
+            weekday: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      ]);
+    }
+  };
+
   const handleChoiceClick = (choice) => {
     setMessages([
       ...messages,
@@ -412,7 +479,9 @@ const ChatBox = ({ messages, setMessages }) => {
       case "December":
         fetch_Month_Spendings(choice.value);
         break;
-
+      case "api-question":
+        callAiApi(choice.text);
+        break;
       default:
         break;
     }

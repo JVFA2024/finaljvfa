@@ -237,37 +237,32 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
   const callAiApi = async (prompt) => {
     try {
       const res = await http.post("/api/general_query", { prompt });
-      console.log(res);
+
       const data = res.data.data.result;
-      if (
-        data ===
-        "Related questions:\n- How can I check my current account balance?\n- Can I receive notifications for my current account balance?\n- Is there a minimum balance requirement for a current account?\n- How often should I monitor my current account balance?\n- Are there any fees associated with checking my current account balance?"
-      ) {
+      if (data.includes("Alternative questions:")) {
+        const resultParts = data.split("\n");
+
+        const alternativeQuestions = resultParts
+          .filter((part) => /^\d+\./.test(part))
+          .map((question) => question.split(".").slice(1).join(".").trim());
         setMessages([
+          ...messages,
+          {
+            sender: "user",
+            text: prompt,
+            time: new Date().toLocaleString([], {
+              weekday: "short",
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          },
           {
             sender: "bot",
-            choices: [
-              {
-                text: t("basicQuestions.q1"),
-                value: "current_balance",
-              },
-              {
-                text: t("basicQuestions.q2"),
-                value: "spent_with_account",
-              },
-              {
-                text: t("basicQuestions.q3"),
-                value: "book_appointment",
-              },
-              {
-                text: t("basicQuestions.q4"),
-                value: "recent_transactions",
-              },
-              {
-                text: t("basicQuestions.q5"),
-                value: "fraudulent_activity",
-              },
-            ],
+            text: data,
+            choices: alternativeQuestions.map((question) => ({
+              text: question,
+              value: "api-question",
+            })),
             time: new Date().toLocaleString([], {
               weekday: "short",
               hour: "2-digit",

@@ -132,7 +132,7 @@ export const BotMessages = ({
                           key={idx}
                           className={`border text-black py-4 px-8 rounded-lg text-center`}
                           onClick={() => handleChoiceClick(choice)}
-                          style={{ flexBasis: idx < 3 ? "30%" : "40%" }}
+                          // style={{ flexBasis: idx < 3 ? "30%" : "40%" }}
                         >
                           {choice.text}
                         </button>
@@ -186,7 +186,7 @@ export const BotMessages = ({
                           key={idx}
                           className="border text-center text-black py-4 px-8 rounded-lg "
                           onClick={() => handleChoiceClick(choice)}
-                          style={{ flexBasis: idx < 3 ? "30%" : "40%" }}
+                          // style={{ flexBasis: idx < 3 ? "30%" : "40%" }}
                         >
                           {choice.text}
                         </button>
