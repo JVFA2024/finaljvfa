@@ -157,7 +157,7 @@ export const BotMessages = ({
                         </button>
                       </>
                     )}
-                    {(message.text === t("customerService.title"))(
+                            {message.text === t("customerService.title") && (
                       <div className="flex gap-4">
                         <Link
                           to={"https://wa.link/mu3jv1"}

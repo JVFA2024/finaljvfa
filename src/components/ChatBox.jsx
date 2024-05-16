@@ -91,7 +91,7 @@ const ChatBox = ({ messages, setMessages }) => {
                   minimumFractionDigits: 2,
                 }).format(tr.amount);
 
-                transactionMessage += `${tr.description} ${amountFormatted} ${t(
+                transactionMessage += `${tr.merchantName} ${amountFormatted} ${t(
                   "currency.SAR"
                 )}\n`;
               });
