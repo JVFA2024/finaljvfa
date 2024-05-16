@@ -1,16 +1,14 @@
-import LoginForm from "../components/LoginForm";
-import logo from "../assets/logo.png";
 import ChatBot from "react-chatbotify";
-import roundedbot from "../assets/rounded-bot.png";
+import { useTranslation } from "react-i18next";
 import bgImg from "../assets/bg.jpg";
 import colLogo from "../assets/colLogo.png";
+import logo from "../assets/logo.png";
+import roundedbot from "../assets/rounded-bot.png";
+import LoginForm from "../components/LoginForm";
 import { http } from "../http";
-import { useTranslation } from "react-i18next";
-import { useState } from "react";
 const Login = () => {
   const { t } = useTranslation();
-  const [choices, setChoices] = useState([]);
-  const [userText, setUserText] = useState("");
+
   const options = {
     audio: false,
     footer: false,
@@ -56,14 +54,20 @@ const Login = () => {
     },
     loop: {
       message: async (params) => {
-        setUserText(params.userInput);
         const result = await fetchData(params.userInput);
-        return result;
+        let finalResult = result;
+        const lines = result.split("\n");
+        const altIndex = lines.findIndex((item) =>
+          item.includes("Alternative questions:")
+        );
+        if (altIndex !== -1) {
+          finalResult = lines.slice(0, altIndex).join("\n");
+        }
+        return finalResult;
       },
       path: "loop",
     },
   };
-  console.log(userText);
   return (
     <div
       className={` min-h-screen relative `}

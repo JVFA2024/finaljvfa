@@ -80,28 +80,22 @@ const ChatBox = ({ messages, setMessages }) => {
             acc[date].push(transaction);
             return acc;
           }, {});
-
-          let transactionMessage = "";
-          Object.keys(grouped)
-            .sort((a, b) => new Date(b) - new Date(a))
-            .forEach((date) => {
-              transactionMessage += `------------------------------ ${date} ------------------------------\n`;
-              grouped[date].forEach((tr) => {
-                const amountFormatted = new Intl.NumberFormat("en-US", {
+          const transactionArray = Object.entries(grouped)
+            .sort(([a], [b]) => new Date(b) - new Date(a))
+            .flatMap(([date, transactions]) =>
+              transactions.map((tr) => ({
+                tr,
+                amountFormatted: new Intl.NumberFormat("en-US", {
                   minimumFractionDigits: 2,
-                }).format(tr.amount);
-
-                transactionMessage += `${tr.merchantName} ${amountFormatted} ${t(
-                  "currency.SAR"
-                )}\n`;
-              });
-              transactionMessage += "\n";
-            });
+                }).format(tr.amount),
+                date,
+              }))
+            );
 
           setMessages((messages) => [
             ...messages,
             {
-              text: transactionMessage,
+              transactions: transactionArray,
               sender: "bot",
               time: new Date().toLocaleString([], {
                 weekday: "short",
@@ -563,7 +557,6 @@ const ChatBox = ({ messages, setMessages }) => {
   useEffect(() => {
     localStorage.setItem("chatMessages", JSON.stringify(messages));
   }, [messages]);
-  // log last message
 
   return (
     <div className="w-[75%] p-4 m-auto h-[90%]">

@@ -74,28 +74,22 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
             acc[date].push(transaction);
             return acc;
           }, {});
-
-          let transactionMessage = "";
-          Object.keys(grouped)
-            .sort((a, b) => new Date(b) - new Date(a))
-            .forEach((date) => {
-              transactionMessage += `------------------------------ ${date} ------------------------------\n`;
-              grouped[date].forEach((tr) => {
-                const amountFormatted = new Intl.NumberFormat("en-US", {
+          const transactionArray = Object.entries(grouped)
+            .sort(([a], [b]) => new Date(b) - new Date(a))
+            .flatMap(([date, transactions]) =>
+              transactions.map((tr) => ({
+                tr,
+                amountFormatted: new Intl.NumberFormat("en-US", {
                   minimumFractionDigits: 2,
-                }).format(tr.amount);
-
-                transactionMessage += `${tr.description} ${amountFormatted} ${t(
-                  "currency.SAR"
-                )}\n`;
-              });
-              transactionMessage += "\n";
-            });
+                }).format(tr.amount),
+                date,
+              }))
+            );
 
           setMessages((messages) => [
             ...messages,
             {
-              text: transactionMessage,
+              transactions: transactionArray,
               sender: "bot",
               time: new Date().toLocaleString([], {
                 weekday: "short",
@@ -366,13 +360,20 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
           }),
         },
       ]);
-    } else if (inputValue === "account balance") {
+    } else if (inputValue === "account balance" || inputValue === "رصيدي") {
       fetchUserBalance();
-    } else if (inputValue === "spend") {
+    } else if (
+      inputValue === "spend" ||
+      inputValue === "انفقت" ||
+      inputValue === "أنفقت"
+    ) {
       fetch_Spendings();
-    } else if (inputValue === "recent transactions") {
+    } else if (
+      inputValue === "recent transactions" ||
+      inputValue === "عملياتي"
+    ) {
       fetch_recent_transactions();
-    } else if (inputValue === "appointment") {
+    } else if (inputValue === "appointment" || inputValue === "موعد") {
       setMessages((messages) => [
         ...messages,
         {
@@ -385,7 +386,7 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
           }),
         },
       ]);
-    } else if (inputValue === "customer service") {
+    } else if (inputValue === "customer service" || inputValue === "التواصل") {
       callCustomerService(inputValue);
     } else {
       callAiApi(inputValue);

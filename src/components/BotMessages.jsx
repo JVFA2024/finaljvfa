@@ -57,6 +57,10 @@ export const BotMessages = ({
     setOpen(true);
   };
 
+  if (message.transactions) {
+    console.log(message.transactions);
+  }
+
   return (
     <div
       className={`flex flex-col ${
@@ -67,7 +71,7 @@ export const BotMessages = ({
       {message.choices && !hasMonths && !hasAiApiCall && (
         <div className="flex flex-col mb-8" data-aos="zoom-in-down">
           <h1
-            className={`text-2xl bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text ${
+            className={`text-2xl text-[#649da3] inline-block  ${
               isRTL ? "text-right" : "text-left"
             }`}
           >
@@ -113,6 +117,89 @@ export const BotMessages = ({
             />
           </>
         ) : null}
+        {message.transactions ? (
+          <div className="w-full h-96 overflow-scroll bg-[#F2F2F3]">
+            <div>
+              {Object.entries(
+                message.transactions.reduce((acc, transaction) => {
+                  if (!acc[transaction.date]) {
+                    acc[transaction.date] = [];
+                  }
+                  acc[transaction.date].push(transaction);
+                  return acc;
+                }, {})
+              ).map(([date, transactions]) => (
+                <div key={date}>
+                  {isRTL ? (
+                    <>
+                      <div className="flex items-center gap-1 justify-center">
+                        ------------------------------------
+                        <p className="text-center p-0 m-0">
+                          {new Intl.DateTimeFormat("ar", {
+                            year: "numeric",
+                          }).format(new Date(date))}
+                        </p>
+                        <p className="text-center p-0 m-0">
+                          {new Intl.DateTimeFormat("ar", {
+                            month: "long",
+                          }).format(new Date(date))}
+                        </p>
+                        <p className="text-center p-0 m-0">
+                          {new Intl.DateTimeFormat("ar", {
+                            day: "numeric",
+                          }).format(new Date(date))}
+                        </p>
+                        ------------------------------------
+                      </div>
+                      {transactions.map((transaction, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between p-4 gap-2"
+                        >
+                          <div className="flex items-center justify-center gap-2">
+                            <p className="p-0 m-0">{t("currency.SAR")}</p>
+                            <p className="p-0 m-0">
+                              {transaction.amountFormatted} -
+                            </p>
+                          </div>
+                          <p className="p-0 m-0">
+                            {transaction.tr.merchantNameInArabic}
+                          </p>
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-center">
+                        ------------------------------------
+                        {new Intl.DateTimeFormat("en", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        }).format(new Date(date))}{" "}
+                        ------------------------------------
+                      </p>
+                      {transactions.map((transaction, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between p-4 gap-2"
+                        >
+                          <p className="p-0 m-0">
+                            {transaction.tr.merchantName}
+                          </p>
+                          <p className="p-0 m-0">
+                            -{transaction.amountFormatted} {t("currency.SAR")}
+                          </p>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
+
         {isRTL ? (
           <div className={`flex gap-2 ${hasAiApiCall ? "w-[60%]" : ""}`}>
             <div>
@@ -157,7 +244,7 @@ export const BotMessages = ({
                         </button>
                       </>
                     )}
-                            {message.text === t("customerService.title") && (
+                    {message.text === t("customerService.title") && (
                       <div className="flex gap-4">
                         <Link
                           to={"https://wa.link/mu3jv1"}
@@ -191,7 +278,9 @@ export const BotMessages = ({
             <div>
               {message.text && (
                 <p
-                  className="bg-[#F2F2F3] p-2 rounded text-center"
+                  className={`bg-[#F2F2F3] p-2 rounded text-center ${
+                    hasAiApiCall ? "text-start" : ""
+                  }`}
                   style={{ whiteSpace: "pre-wrap" }}
                 >
                   {message.text}
