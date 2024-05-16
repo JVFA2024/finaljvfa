@@ -75,5 +75,10 @@
   },
   "totalSpent": "You have spent a total of ",
   "totalSpentInMonth": "You have spent in this month a total of ",
-  "needHelp": "Do you need any help?"
+  "needHelp": "Do you need any help?",
+  "customerService": {
+    "title": "Please contact with our customer service via whatsapp or X",
+    "whatsapp": "Whatsapp",
+    "x": "X"
+  }
 }

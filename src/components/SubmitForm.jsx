@@ -245,6 +245,11 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
         const alternativeQuestions = resultParts
           .filter((part) => /^\d+\./.test(part))
           .map((question) => question.split(".").slice(1).join(".").trim());
+        const rest = data
+          .split("\n")
+          .filter((line) => !/^\d+\./.test(line.trim()))
+          .join("\n");
+
         setMessages([
           ...messages,
           {
@@ -258,11 +263,12 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
           },
           {
             sender: "bot",
-            text: data,
+            text: rest,
             choices: alternativeQuestions.map((question) => ({
               text: question,
               value: "api-question",
             })),
+            aiApiCall: true,
             time: new Date().toLocaleString([], {
               weekday: "short",
               hour: "2-digit",
@@ -300,9 +306,34 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
       ]);
     }
   };
+  const callCustomerService = (text) => {
+    setMessages([
+      ...messages,
+      {
+        text,
+        sender: "user",
+        time: new Date().toLocaleString([], {
+          weekday: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
+      {
+        text: t("customerService.title"),
+        aiApiCall: true,
+        sender: "bot",
+        time: new Date().toLocaleString([], {
+          weekday: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
+    ]);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!inputValue.trim()) return;
+    console.log(inputValue);
     setMessages([
       ...messages,
       {
@@ -315,6 +346,7 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
         }),
       },
     ]);
+
     if (inputValue === t("basicQuestions.q1")) {
       fetchUserBalance();
     } else if (inputValue === t("basicQuestions.q2")) {
@@ -334,9 +366,31 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
           }),
         },
       ]);
+    } else if (inputValue === "account balance") {
+      fetchUserBalance();
+    } else if (inputValue === "spend") {
+      fetch_Spendings();
+    } else if (inputValue === "recent transactions") {
+      fetch_recent_transactions();
+    } else if (inputValue === "appointment") {
+      setMessages((messages) => [
+        ...messages,
+        {
+          text: `${t("api-answers.appointment")}`,
+          sender: "bot",
+          time: new Date().toLocaleString([], {
+            weekday: "short",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      ]);
+    } else if (inputValue === "customer service") {
+      callCustomerService(inputValue);
     } else {
       callAiApi(inputValue);
     }
+
     setInputValue("");
   };
   return (

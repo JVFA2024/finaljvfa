@@ -348,6 +348,11 @@ const ChatBox = ({ messages, setMessages }) => {
         const alternativeQuestions = resultParts
           .filter((part) => /^\d+\./.test(part))
           .map((question) => question.split(".").slice(1).join(".").trim());
+
+        const rest = data
+          .split("\n")
+          .filter((line) => !/^\d+\./.test(line.trim()))
+          .join("\n");
         setMessages([
           ...messages,
           {
@@ -361,11 +366,12 @@ const ChatBox = ({ messages, setMessages }) => {
           },
           {
             sender: "bot",
-            text: data,
+            text: rest,
             choices: alternativeQuestions.map((question) => ({
               text: question,
               value: "api-question",
             })),
+            aiApiCall: true,
             time: new Date().toLocaleString([], {
               weekday: "short",
               hour: "2-digit",
@@ -402,6 +408,30 @@ const ChatBox = ({ messages, setMessages }) => {
         },
       ]);
     }
+  };
+  const callCustomerService = (text) => {
+    setMessages([
+      ...messages,
+      {
+        text,
+        sender: "user",
+        time: new Date().toLocaleString([], {
+          weekday: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
+      {
+        text: t("customerService.title"),
+        aiApiCall: true,
+        sender: "bot",
+        time: new Date().toLocaleString([], {
+          weekday: "short",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
+    ]);
   };
 
   const handleChoiceClick = (choice) => {
@@ -482,6 +512,9 @@ const ChatBox = ({ messages, setMessages }) => {
       case "api-question":
         callAiApi(choice.text);
         break;
+      case "customer_service":
+        callCustomerService(choice.text);
+        break;
       default:
         break;
     }
@@ -514,7 +547,7 @@ const ChatBox = ({ messages, setMessages }) => {
             },
             {
               text: t("basicQuestions.q5"),
-              value: "fraudulent_activity",
+              value: "customer_service",
             },
           ],
           time: new Date().toLocaleString([], {

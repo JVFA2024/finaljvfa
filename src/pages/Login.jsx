@@ -6,8 +6,11 @@ import bgImg from "../assets/bg.jpg";
 import colLogo from "../assets/colLogo.png";
 import { http } from "../http";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 const Login = () => {
   const { t } = useTranslation();
+  const [choices, setChoices] = useState([]);
+  const [userText, setUserText] = useState("");
   const options = {
     audio: false,
     footer: false,
@@ -21,7 +24,6 @@ const Login = () => {
       secondaryColor: "#024A52",
       fontFamily: "Cairo, sans-serif",
     },
-
     chatButton: {
       icon: roundedbot,
     },
@@ -54,13 +56,14 @@ const Login = () => {
     },
     loop: {
       message: async (params) => {
+        setUserText(params.userInput);
         const result = await fetchData(params.userInput);
         return result;
       },
       path: "loop",
     },
   };
-
+  console.log(userText);
   return (
     <div
       className={` min-h-screen relative `}

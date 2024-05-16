@@ -4,6 +4,7 @@ import { AppointmentModel } from "./AppointmentModel";
 import { useState } from "react";
 import LineChart from "./LineChart";
 import DonutChart from "./DonutChart";
+import { Link } from "react-router-dom";
 
 export const BotMessages = ({
   isRTL,
@@ -35,6 +36,7 @@ export const BotMessages = ({
       months.includes(choice.text.toLowerCase())
     );
 
+  const hasAiApiCall = message.choices && message.aiApiCall;
   const hasCategories = message.monthDates && message.monthDates.length > 0;
   const hasCategoriesSummery =
     message.monthCategories && message.monthCategories.length > 0;
@@ -62,7 +64,7 @@ export const BotMessages = ({
       }`}
     >
       <AppointmentModel open={open} setOpen={setOpen} />
-      {message.choices && !hasMonths && (
+      {message.choices && !hasMonths && !hasAiApiCall && (
         <div className="flex flex-col mb-8" data-aos="zoom-in-down">
           <h1
             className={`text-2xl bg-gradient-to-r from-blue-600 via-green-500 to-indigo-400 inline-block text-transparent bg-clip-text ${
@@ -112,7 +114,7 @@ export const BotMessages = ({
           </>
         ) : null}
         {isRTL ? (
-          <div className="flex gap-2">
+          <div className={`flex gap-2 ${hasAiApiCall ? "w-[60%]" : ""}`}>
             <div>
               {message.text && (
                 <p
@@ -155,6 +157,24 @@ export const BotMessages = ({
                         </button>
                       </>
                     )}
+                    {(message.text === t("customerService.title"))(
+                      <div className="flex gap-4">
+                        <Link
+                          to={"https://wa.link/mu3jv1"}
+                          target="_blank"
+                          className="bg-[#024A52] hover:no-underline hover:text-white visited:text-white visited:no-underline hover:bg-[#32686e] text-white capitalize border px-5 py-2.5  font-bold rounded-full"
+                        >
+                          {t("customerService.whatsapp")}
+                        </Link>
+                        <Link
+                          to={"https://twitter.com/BSF_help"}
+                          target="_blank"
+                          className="bg-[#024A52] hover:no-underline hover:text-white visited:text-white visited:no-underline hover:bg-[#32686e] text-white capitalize border px-5 py-2.5  font-bold rounded-full"
+                        >
+                          {t("customerService.x")}
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </p>
               )}
@@ -164,8 +184,8 @@ export const BotMessages = ({
             )}
           </div>
         ) : (
-          <div className="flex gap-2">
-            {message.choices ? null : (
+          <div className={`flex gap-2 ${hasAiApiCall ? "w-[60%]" : ""}`}>
+            {message.choices && !hasAiApiCall ? null : (
               <img src={botImg} alt="bot" className="max-h-9" />
             )}
             <div>
@@ -208,6 +228,24 @@ export const BotMessages = ({
                           {t("letsGo.title")}
                         </button>
                       </>
+                    )}
+                    {message.text === t("customerService.title") && (
+                      <div className="flex gap-4">
+                        <Link
+                          to={"https://wa.link/mu3jv1"}
+                          target="_blank"
+                          className="bg-[#024A52] hover:no-underline hover:text-white visited:text-white visited:no-underline hover:bg-[#32686e] text-white capitalize border px-5 py-2.5  font-bold rounded-full"
+                        >
+                          {t("customerService.whatsapp")}
+                        </Link>
+                        <Link
+                          to={"https://twitter.com/BSF_help"}
+                          target="_blank"
+                          className="bg-[#024A52] hover:no-underline hover:text-white visited:text-white visited:no-underline hover:bg-[#32686e] text-white capitalize border px-5 py-2.5  font-bold rounded-full"
+                        >
+                          {t("customerService.x")}
+                        </Link>
+                      </div>
                     )}
                   </div>
                 </p>

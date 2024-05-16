@@ -1,10 +1,17 @@
-import { Globe, Info, Power } from "lucide-react";
+import { BookOpenText, Globe, Info, Power } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Button, ButtonToolbar, Notification, useToaster } from "rsuite";
 import { Dropdown, Avatar } from "rsuite";
+import ModalInfoDetails from "./ModalInfoDetails";
+import { useState } from "react";
 const SideBar = ({ handleOpen, setMessages }) => {
   const navigate = useNavigate();
+  const [openModel, setOpenModel] = useState(false);
+  const handleOpenModel = () => {
+    setOpenModel(true);
+  };
+  const handleCloseModel = () => setOpenModel(false);
   const { t, i18n } = useTranslation();
   const isRtl = i18n.dir() === "rtl";
   const currentLang = localStorage.getItem("i18nextLng");
@@ -77,6 +84,9 @@ const SideBar = ({ handleOpen, setMessages }) => {
           <button onClick={() => handleOpen("xs")}>
             <Info color="#D3F4F1" size={30} />
           </button>
+          <button onClick={handleOpenModel}>
+            <BookOpenText color="#D3F4F1" size={30} />
+          </button>
           <button
             className="flex flex-col items-center justify-center"
             onClick={() => toaster.push(message, "topCenter")}
@@ -90,6 +100,11 @@ const SideBar = ({ handleOpen, setMessages }) => {
           </button>
         </div>
       </div>
+      <ModalInfoDetails
+        open={openModel}
+        setOpen={setOpenModel}
+        handleClose={handleCloseModel}
+      />
     </div>
   );
 };
