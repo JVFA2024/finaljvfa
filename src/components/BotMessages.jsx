@@ -12,6 +12,7 @@ export const BotMessages = ({
   handleChoiceClick,
   amounts,
   categories,
+  isLoading,
 }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -199,13 +200,21 @@ export const BotMessages = ({
             </div>
           </div>
         ) : null}
-
+        {isLoading ? (
+          <div
+            className={`absolute bottom-28 ${isRTL ? "right-72" : "left-72"}`}
+          >
+            <div className="Buttons"></div>
+          </div>
+        ) : null}
         {isRTL ? (
           <div className={`flex gap-2 ${hasAiApiCall ? "w-[60%]" : ""}`}>
             <div>
               {message.text && (
                 <p
-                  className="bg-[#F2F2F3] p-2 rounded text-center"
+                  className={`bg-[#F2F2F3] p-2 rounded text-center ${
+                    hasAiApiCall ? "text-end" : ""
+                  }`}
                   style={{ whiteSpace: "pre-wrap" }}
                 >
                   {message.text}
@@ -295,7 +304,6 @@ export const BotMessages = ({
                           key={idx}
                           className="border text-center text-black py-4 px-8 rounded-lg "
                           onClick={() => handleChoiceClick(choice)}
-                          // style={{ flexBasis: idx < 3 ? "30%" : "40%" }}
                         >
                           {choice.text}
                         </button>

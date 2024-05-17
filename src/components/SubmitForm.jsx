@@ -3,10 +3,18 @@ import { useTranslation } from "react-i18next";
 import botImg from "../assets/rounded-bot.png";
 import { SendHorizontal } from "lucide-react";
 import { http } from "../http";
-const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
+const SubmitForm = ({
+  setMessages,
+  messages,
+  setAmounts,
+  setCategories,
+
+  setIsLoading,
+}) => {
   const [inputValue, setInputValue] = useState("");
   const { t, i18n } = useTranslation();
   const isRTL = i18n.dir() === "rtl";
+
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -229,13 +237,12 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
     }
   };
   const callAiApi = async (prompt) => {
+    setIsLoading(true);
     try {
       const res = await http.post("/api/general_query", { prompt });
-
       const data = res.data.data.result;
       if (data.includes("Alternative questions:")) {
         const resultParts = data.split("\n");
-
         const alternativeQuestions = resultParts
           .filter((part) => /^\d+\./.test(part))
           .map((question) => question.split(".").slice(1).join(".").trim());
@@ -299,6 +306,7 @@ const SubmitForm = ({ setMessages, messages, setAmounts, setCategories }) => {
         },
       ]);
     }
+    setIsLoading(false);
   };
   const callCustomerService = (text) => {
     setMessages([

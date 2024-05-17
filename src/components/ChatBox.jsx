@@ -10,12 +10,13 @@ const ChatBox = ({ messages, setMessages }) => {
   const { t, i18n } = useTranslation();
   const [amounts, setAmounts] = useState([]);
   const [categories, setCategories] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
   const isRTL = i18n.dir() === "rtl";
 
   const fetchUserBalance = async () => {
+    setIsLoading(true);
     try {
       const res = await http.get("/userbalance");
       const data = res.data;
@@ -56,9 +57,11 @@ const ChatBox = ({ messages, setMessages }) => {
         },
       ]);
     }
+    setIsLoading(false);
   };
 
   const fetch_recent_transactions = async () => {
+    setIsLoading(true);
     try {
       const res = await http.get("/recent_transactions");
       const data = res.data;
@@ -136,8 +139,10 @@ const ChatBox = ({ messages, setMessages }) => {
         },
       ]);
     }
+    setIsLoading(false);
   };
   const fetch_Spendings = async () => {
+    setIsLoading(true);
     try {
       const response = await http.get("/user_spendings");
       const data = await response.data;
@@ -231,9 +236,11 @@ const ChatBox = ({ messages, setMessages }) => {
         },
       ]);
     }
+    setIsLoading(false);
   };
 
   const fetch_Month_Spendings = async (selectedMonth) => {
+    setIsLoading(true);
     try {
       const response = await http.get("/user_spendings");
       const data = await response.data;
@@ -329,9 +336,11 @@ const ChatBox = ({ messages, setMessages }) => {
     } catch (error) {
       console.error("Fetch error:", error);
     }
+    setIsLoading(false);
   };
 
   const callAiApi = async (prompt) => {
+    setIsLoading(true);
     try {
       const res = await http.post("/api/general_query", { prompt });
 
@@ -402,6 +411,7 @@ const ChatBox = ({ messages, setMessages }) => {
         },
       ]);
     }
+    setIsLoading(false);
   };
   const callCustomerService = (text) => {
     setMessages([
@@ -583,6 +593,7 @@ const ChatBox = ({ messages, setMessages }) => {
                   handleChoiceClick={handleChoiceClick}
                   amounts={amounts}
                   categories={categories}
+                  isLoading={isLoading}
                 />
               )}
             </div>
@@ -596,6 +607,7 @@ const ChatBox = ({ messages, setMessages }) => {
         messages={messages}
         setAmounts={setAmounts}
         setCategories={setCategories}
+        setIsLoading={setIsLoading}
       />
     </div>
   );
