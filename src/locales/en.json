@@ -17,7 +17,7 @@
     "q2": "How much did I spend with my account?",
     "q3": "I want to book an appointment.",
     "q4": "Can you provide details of my recent transactions?",
-    "q5": "I want to contact customer service agent."
+    "q5": "I want to contact customer service agent"
   },
   "modal": {
     "title": "Welcome to the Jana Virtual Financial Assistant (JVFA)!",
@@ -81,5 +81,21 @@
     "whatsapp": "Whatsapp",
     "x": "X"
   },
-  "yourTransactions": "Your transactions"
+  "yourTransactions": "Your transactions",
+  "modelQuestions": {
+    "title": "Hi I’m JANA, your virtual financial assistant.",
+    "subtitle": "Here are some things I can help you with.",
+    "q1": "Finding Answers to Banking-Related Questions",
+    "q2": "Checking Balance Information",
+    "q3": "Viewing Dashboard Summary Statistics",
+    "q4": "Booking an Appointment",
+    "q5": "Viewing Recent Transactions",
+    "q6": "Contact Customer Service Agent",
+    "a1": "How can I register in JANA rewards program?",
+    "a2": "What is my current account balance?",
+    "a3": "How much did I spend with my account?",
+    "a4": "I want to book an appointment.",
+    "a5": "Can you provide details of my recent transactions?",
+    "a6": "I want to contact customer service agent."
+  }
 }

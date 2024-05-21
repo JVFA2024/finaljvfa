@@ -1,42 +1,40 @@
 import { useTranslation } from "react-i18next";
 import { Modal, Button, Divider } from "rsuite";
-// Hi I’m JANA, your virtual financial assistant.
-// Here are some things I can help you with.
 
 const ModalInfoDetails = ({ open, handleClose }) => {
   const { t, i18n } = useTranslation();
   const data = [
     {
-      q: "Finding Answers to Banking-Related Questions",
-      a: "How can I register in JANA rewards program?",
+      q: t("modelQuestions.q1"),
+      a: t("modelQuestions.a1"),
     },
     {
-      q: "Checking Balance Information",
-      a: "What is my current account balance?",
+      q: t("modelQuestions.q2"),
+      a: t("modelQuestions.a2"),
     },
     {
-      q: "Viewing Dashboard Summary Statistics",
-      a: "How much did I spend with my account?",
+      q: t("modelQuestions.q3"),
+      a: t("modelQuestions.a3"),
     },
     {
-      q: "Booking an Appointment",
-      a: "I want to book an appointment.",
+      q: t("modelQuestions.q4"),
+      a: t("modelQuestions.a4"),
     },
     {
-      q: "Viewing Recent Transactions",
-      a: "Can you provide details of my recent transactions?",
+      q: t("modelQuestions.q5"),
+      a: t("modelQuestions.a5"),
     },
     {
-      q: "Contact Customer Service Agent",
-      a: "I want to contact customer service agent.",
+      q: t("modelQuestions.q6"),
+      a: t("modelQuestions.a6"),
     },
   ];
   return (
     <Modal open={open} onClose={handleClose} dir={i18n.dir()}>
       <Modal.Body className="text-center text-xl flex justify-around">
         <div className="text-[#649da3]">
-          <p>Hi I’m JANA, your virtual financial assistant.</p>
-          <p>Here are some things I can help you with.</p>
+          <p>{t("modelQuestions.title")}</p>
+          <p>{t("modelQuestions.subtitle")}</p>
         </div>
       </Modal.Body>
 
