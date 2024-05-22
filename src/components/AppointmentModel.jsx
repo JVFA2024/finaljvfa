@@ -58,9 +58,14 @@ export const AppointmentModel = ({ open, setOpen }) => {
     ).accountNumber;
 
     console.log(formValue, "Form Value");
-    // API Call
+
+    // send a POST request to the "/appointments" endpoint with formValue
     const res = await http.post("/appointments", formValue);
-    if (res.status !== 200) {
+
+    // Check if the response status was successful
+    if (res.status == 201) {
+
+       // If successful, display a success notification 
       toaster.push(
         <Notification type={"success"} closable dir={i18n.dir()}>
           <p>{t("appointment.success")}</p>
@@ -69,6 +74,8 @@ export const AppointmentModel = ({ open, setOpen }) => {
       );
       setOpen(false);
     } else {
+
+      // If not successful, display an error notification
       toaster.push(
         <Notification type={"error"} closable dir={i18n.dir()}>
           <p>{t("appointment.error")}</p>

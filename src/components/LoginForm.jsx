@@ -37,15 +37,30 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      // Send a POST request to "/login" endpoint with the username and password
       const res = await http.post("/login", { username, password });
+
+      // Stores the user data and token from the response in the local storage
       localStorage.setItem("user", JSON.stringify(res.data.user));
       localStorage.setItem("token", res.data.token);
+
+      // Display a success message
       toaster.push(successMessage, { placement });
+
+       // Clear state the username and password
       setUsername("");
       setPassword("");
+
+      // Navigate to the home page
       navigate("/");
-      window.location.reload();
+
+      // Reload the page to apply changes after 500ms
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+      
     } catch (error) {
+      // If there's an error, Display an error message
       toaster.push(errMessage, { placement });
     }
   };
