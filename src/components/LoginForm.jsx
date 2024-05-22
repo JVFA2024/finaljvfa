@@ -47,7 +47,7 @@ const LoginForm = () => {
       // Display a success message
       toaster.push(successMessage, { placement });
 
-       // Clear state the username and password
+       // Clear state for the username and password
       setUsername("");
       setPassword("");
 
