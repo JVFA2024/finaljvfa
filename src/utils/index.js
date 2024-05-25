@@ -163,7 +163,7 @@ export const fetch_Spendings = async (
 
     // Check if the response status was successful
     if (response.status === 200) {
-      // If successful, Check if there are spendings in the response 
+      // If successful, Check if the spendings are found 
       if (data.spendings && data.spendings.length > 0) {
 
         // Reduce spendings to get amounts grouped by month
@@ -282,8 +282,6 @@ export const callAiApi = async (
   try {
      // Send a POST request to "/api/general_query" endpoint with the provided prompt
     const res = await http.post("/api/general_query", { prompt });
-
-    // Extract the result data from the response
     const data = res.data.data.result;
 
     // Check if the result includes alternative questions
